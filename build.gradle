@@ -1,0 +1,55 @@
+plugins {
+    id 'java'
+    id "io.freefair.lombok" version "${lombokVersion}"
+}
+
+group 'com.equalexperts'
+version '0.0.1-SNAPSHOT'
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    cucumberRuntime {
+        extendsFrom testImplementation
+    }
+}
+
+dependencies {
+    testImplementation "org.mockito:mockito-core:${mockitoVersion}"
+    testImplementation "org.assertj:assertj-core:${assertjVersion}"
+    testImplementation "io.cucumber:cucumber-java:${cucumberVersion}"
+    testImplementation "io.cucumber:cucumber-junit:${cucumberVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter:${junitVersion}"
+
+    implementation "org.javamoney.moneta:moneta-core:${monetaVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    implementation ("org.zalando:jackson-datatype-money:${moneyJacksonFormatterVersion}"){
+        exclude module: 'jackson-annotations'
+        exclude module: 'jackson-databind'
+        exclude module: 'jackson-core'
+    }
+
+}
+
+test {
+    useJUnitPlatform()
+}
+
+task cucumber() {
+    dependsOn assemble, testClasses
+    doLast {
+        javaexec {
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+            args = [
+                    '--plugin', 'pretty',
+                    '--plugin', 'html:build/reports/cucumber-report.html',
+                    '--glue', 'com.equalexperts.stepdefs',
+                    'src/test/resources']
+        }
+    }
+}
