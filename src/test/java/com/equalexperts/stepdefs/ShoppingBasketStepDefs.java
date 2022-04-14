@@ -23,7 +23,6 @@ public class ShoppingBasketStepDefs {
     public void aProductDoveSoapWithAUnitPriceOf(Double itemPrice) {
         item.setItemName("Dove Soap");
         item.setUnitPrice(Money.of(itemPrice, "GBP"));
-        shoppingCart.addItemToBasket(item);
     }
 
     @When("The user adds {int} Dove Soaps to the shopping cart")
@@ -43,7 +42,7 @@ public class ShoppingBasketStepDefs {
     }
 
     @Then("The shopping cart’s total price should equal {double}")
-    public void theShoppingCartSTotalPriceShouldEqual(Double productPrice) {
-
+    public void theShoppingCartSTotalPriceShouldEqual(Double itemPrice) {
+        assertThat(shoppingCart.calculateTotalAmount()).isEqualTo(Money.of(itemPrice, "GBP"));
     }
 }

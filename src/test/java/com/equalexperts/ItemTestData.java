@@ -6,13 +6,13 @@ import org.javamoney.moneta.Money;
 
 public final class ItemTestData {
 
-    public static ShoppingCart loadItemsIntoShoppingCart(){
+    public static ShoppingCart load5DovesIntoShoppingCart(){
         ShoppingCart shoppingCart = new ShoppingCart();
 
         Item firstItem = Item.builder()
-                             .itemName("Axe Deo’s")
+                             .itemName("Dove Soap")
                              .quantity(1)
-                             .unitPrice(Money.of(99.99, "GBP"))
+                             .unitPrice(Money.of(39.99, "GBP"))
                              .build();
         Item secondItem = Item.builder()
                               .itemName("Dove Soap")
@@ -25,9 +25,9 @@ public final class ItemTestData {
                              .unitPrice(Money.of(39.99, "GBP"))
                              .build();
         Item fourthItem = Item.builder()
-                              .itemName("Axe Deo’s")
+                              .itemName("Dove Soap")
                               .quantity(1)
-                              .unitPrice(Money.of(99.99, "GBP"))
+                              .unitPrice(Money.of(39.99, "GBP"))
                               .build();
         Item fifthItem = Item.builder()
                              .itemName("Dove Soap")
