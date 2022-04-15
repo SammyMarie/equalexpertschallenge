@@ -10,43 +10,52 @@ import javax.money.MonetaryAmount;
 import javax.money.MonetaryOperator;
 import javax.money.RoundingQueryBuilder;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Builder
 @AllArgsConstructor
 public class ShoppingCart {
 
-    private Map<Item, Integer> itemMap;
+    private List<Item> items;
     private MonetaryAmount totalAmount;
 
     public ShoppingCart() {
-        itemMap = new HashMap<>();
         MonetaryOperator ROUNDING = Monetary.getRounding(RoundingQueryBuilder.of()
                                                                              .setScale(2)
-                                                                             .set(RoundingMode.UP)
+                                                                             .set(RoundingMode.HALF_EVEN)
                                                                              .build());
+        items = new ArrayList<>();
         totalAmount = Money.of(0, "GBP").with(ROUNDING);
     }
 
-    public void addItemToBasket(Item item) {
-        itemMap.put(item, itemMap.containsKey(item) ? itemMap.get(item) + 1 : 1);
+    public void addItemToBasket(Item item){
+        int idxPos = items.indexOf(item);
+        boolean isItemNameInList = items.stream()
+                                        .anyMatch(itemInList -> itemInList.getItemName()
+                                                                          .equals(item.getItemName()));
+
+        if(idxPos != -1) {
+            Item itemInList = items.get(idxPos);
+            itemInList.setQuantity(item.getQuantity() + 1);
+        }else if(idxPos == -1 && isItemNameInList) {
+            items.stream()
+                 .filter(itemInList -> itemInList != null && item.getItemName().equals(itemInList.getItemName()))
+                 .findAny()
+                 .ifPresent(itemInList -> itemInList.setQuantity(item.getQuantity() + itemInList.getQuantity()));
+        }else{
+            items.add(item);
+        }
     }
 
-    public Map<Item, Integer> retrieveShoppingCartItems() {
-        itemMap.forEach((K, V) -> {
-            if (V > K.getQuantity()) {
-                K.setQuantity(V);
-            }
-        });
-
-        return itemMap;
+    public List<Item> retrieveShoppingCartItems(){
+        return items;
     }
 
-    public MonetaryAmount calculateTotalAmount() {
-        retrieveShoppingCartItems().keySet()
-                          .forEach(item -> totalAmount = totalAmount.add(item.getUnitPrice()
-                                                                             .multiply(item.getQuantity())));
+    public MonetaryAmount calculateTotalAmount(){
+        items.forEach(item -> totalAmount = totalAmount.add(item.getUnitPrice().multiply(item.getQuantity())));
         return totalAmount;
     }
 }

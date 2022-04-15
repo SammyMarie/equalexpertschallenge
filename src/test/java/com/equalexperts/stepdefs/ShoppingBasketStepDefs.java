@@ -26,18 +26,27 @@ public class ShoppingBasketStepDefs {
     }
 
     @When("The user adds {int} Dove Soaps to the shopping cart")
-    public void theUserAddsDoveSoapsToTheShoppingCart(Integer productQuantity) {
+    public void theUserAddsDoveSoapsToTheShoppingCart(Integer itemQuantity) {
         item.setItemName("Dove Soap");
-        item.setQuantity(productQuantity);
+        item.setQuantity(itemQuantity);
+        shoppingCart.addItemToBasket(item);
+    }
+
+    @When("Adds another {int} Dove Soaps to the shopping cart")
+    public void addsAnotherDoveSoapsToTheShoppingCart(Integer itemQuantity) {
+        Item item = Item.builder().itemName("Dove Soap")
+                        .quantity(itemQuantity)
+                        .unitPrice(Money.of(39.99, "GBP"))
+                        .build();
         shoppingCart.addItemToBasket(item);
     }
 
     @Then("The shopping cart should contain {int} Dove Soaps each with a unit price of {double}")
     public void theShoppingCartShouldContainDoveSoapsEachWithAUnitPriceOf(Integer itemQuantity,
                                                                           Double itemPrice) {
-        shoppingCart.retrieveShoppingCartItems().forEach((K, V) -> {
-            assertThat(K.getQuantity()).isEqualTo(itemQuantity);
-            assertThat(K.getUnitPrice().getNumber().doubleValue()).isEqualTo(itemPrice);
+        shoppingCart.retrieveShoppingCartItems().forEach(item -> {
+            assertThat(item.getQuantity()).isEqualTo(itemQuantity);
+            assertThat(item.getUnitPrice().getNumber().doubleValue()).isEqualTo(itemPrice);
         });
     }
 

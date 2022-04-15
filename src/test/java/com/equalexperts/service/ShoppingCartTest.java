@@ -28,7 +28,7 @@ class ShoppingCartTest {
     void addItemToShoppingCart_shouldSucceed(){
         shoppingCart = load5DovesIntoShoppingCart();
         assertThat(shoppingCart.retrieveShoppingCartItems()).isNotEmpty();
-        shoppingCart.retrieveShoppingCartItems().forEach((K, V) -> assertThat(K.getQuantity()).isEqualTo(5));
+        shoppingCart.retrieveShoppingCartItems().forEach(item -> assertThat(item.getQuantity()).isEqualTo(5));
     }
 
     @Test
