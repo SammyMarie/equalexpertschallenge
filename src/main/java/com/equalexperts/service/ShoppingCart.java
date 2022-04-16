@@ -11,9 +11,7 @@ import javax.money.MonetaryOperator;
 import javax.money.RoundingQueryBuilder;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Builder
 @AllArgsConstructor
@@ -32,22 +30,7 @@ public class ShoppingCart {
     }
 
     public void addItemToBasket(Item item){
-        int idxPos = items.indexOf(item);
-        boolean isItemNameInList = items.stream()
-                                        .anyMatch(itemInList -> itemInList.getItemName()
-                                                                          .equals(item.getItemName()));
-
-        if(idxPos != -1) {
-            Item itemInList = items.get(idxPos);
-            itemInList.setQuantity(item.getQuantity() + 1);
-        }else if(idxPos == -1 && isItemNameInList) {
-            items.stream()
-                 .filter(itemInList -> itemInList != null && item.getItemName().equals(itemInList.getItemName()))
-                 .findAny()
-                 .ifPresent(itemInList -> itemInList.setQuantity(item.getQuantity() + itemInList.getQuantity()));
-        }else{
-            items.add(item);
-        }
+        items.add(item);
     }
 
     public List<Item> retrieveShoppingCartItems(){
