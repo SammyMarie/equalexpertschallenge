@@ -14,4 +14,8 @@ Instruction version number:
 9. MonetaryAmount JSON parser (zalando and fasterjackson)
 
 _Notes_:
-After unzipping the project, and moving into the parent folder run `./gradlew clean build` then run
+After unzipping the project, and moving into the parent folder run
+
+1. `./gradlew clean build` then,
+2. `./gradlew cucumber` this will run and display the cucumber tests,
+3. `./gradlew test` this will run the unit tests
