@@ -9,12 +9,19 @@ import org.javamoney.moneta.Money;
 
 import java.util.stream.IntStream;
 
+import static com.equalexperts.ItemTestData.addAnotherDoveItemToShoppingCart;
+import static com.equalexperts.ItemTestData.addAxePrice;
+import static com.equalexperts.ItemTestData.addAxeQuantity;
+import static com.equalexperts.ItemTestData.addDovePrice;
+import static com.equalexperts.ItemTestData.addDoveQuantity;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 public class ShoppingBasketStepDefs {
 
     private final ShoppingCart shoppingCart = new ShoppingCart();
-    private final Item item = new Item();
+    private final Item doveItem = new Item();
+    private final Item axeItem = new Item();
+
 
     @Given("An empty shopping cart")
     public void anEmptyShoppingCart() {
@@ -23,14 +30,24 @@ public class ShoppingBasketStepDefs {
 
     @Given("A product, Dove Soap with a unit price of {double}")
     public void aProductDoveSoapWithAUnitPriceOf(double itemPrice) {
-        addDovePrice(item, itemPrice);
+        addDovePrice(doveItem, itemPrice);
+    }
+
+    @Given("Another product, Axe Deo with a unit price of {double}")
+    public void anotherProductAxeDeoWithAUnitPriceOf(Double itemPrice) {
+        addAxePrice(axeItem, itemPrice);
+    }
+
+    @Given("A tax rate of {double}%")
+    public void aTaxRateOf(Double itemTax) {
+        shoppingCart.setTaxValue(itemTax);
     }
 
     @When("The user adds {int} Dove Soaps to the shopping cart")
     public void theUserAddsDoveSoapsToTheShoppingCart(int itemQuantity) {
         for (int index = 1; index <= itemQuantity; index++) {
-            addDoveQuantity(item);
-            shoppingCart.addItemToBasket(item);
+            addDoveQuantity(doveItem);
+            shoppingCart.addItemToBasket(doveItem);
         }
     }
 
@@ -39,6 +56,14 @@ public class ShoppingBasketStepDefs {
         IntStream.rangeClosed(1, itemQuantity)
                  .mapToObj(index -> addAnotherDoveItemToShoppingCart())
                  .forEach(shoppingCart::addItemToBasket);
+    }
+
+    @When("Adds {int} Axe Deo’s to the shopping cart")
+    public void addsAxeDeoSToTheShoppingCart(Integer itemQuantity) {
+        for (int index = 1; index <= itemQuantity; index++) {
+            addAxeQuantity(axeItem);
+            shoppingCart.addItemToBasket(axeItem);
+        }
     }
 
     @Then("The shopping cart should contain {int} Dove Soaps each with a unit price of {double}")
@@ -52,7 +77,7 @@ public class ShoppingBasketStepDefs {
 
         shoppingCart.retrieveShoppingCartItems()
                     .stream()
-                    .filter(item1 -> item.getItemName().equals("Dove Soap"))
+                    .filter(item -> item.getItemName().equals("Dove Soap"))
                     .forEach(item -> assertThat(item.getUnitPrice().getNumber()
                                                     .doubleValue()).isEqualTo(itemPrice));
     }
@@ -62,20 +87,23 @@ public class ShoppingBasketStepDefs {
         assertThat(shoppingCart.calculateTotalAmount()).isEqualTo(Money.of(itemPrice, "GBP"));
     }
 
-    private void addDovePrice(Item item, double itemPrice) {
-        item.setItemName("Dove Soap");
-        item.setUnitPrice(Money.of(itemPrice, "GBP"));
+    @Then("The total tax amount should equal {double}")
+    public void theTotalTaxAmountShouldEqual(double totalItemTax) {
+        assertThat(shoppingCart.totalItemTax()).isEqualTo(totalItemTax);
     }
 
-    private void addDoveQuantity(Item item) {
-        item.setItemName("Dove Soap");
-        item.setQuantity(1);
-    }
+    @Then("The shopping cart should contain {int} Axe Deo’s each with a unit price of {double}")
+    public void theShoppingCartShouldContainAxeDeoSEachWithAUnitPriceOf(Integer itemQuantity, Double itemPrice) {
+        long doveQuantity = shoppingCart.retrieveShoppingCartItems()
+                                        .stream()
+                                        .filter(item -> item.getItemName().equals("Axe Deo"))
+                                        .count();
+        assertThat((int) doveQuantity).isEqualTo(itemQuantity);
 
-    private Item addAnotherDoveItemToShoppingCart() {
-        return Item.builder().itemName("Dove Soap")
-                   .quantity(1)
-                   .unitPrice(Money.of(39.99, "GBP"))
-                   .build();
+        shoppingCart.retrieveShoppingCartItems()
+                    .stream()
+                    .filter(item -> item.getItemName().equals("Axe Deo"))
+                    .forEach(item -> assertThat(item.getUnitPrice().getNumber()
+                                                    .doubleValue()).isEqualTo(itemPrice));
     }
 }
