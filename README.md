@@ -1,8 +1,10 @@
 Instruction version number:
 741e2021841b2ee9dfe6da974bbeb934b579947f
 
-##Shopping cart Project:
+### Shopping cart Project:
+
 **This project was developed using the following**:
+
 1. Gradle,
 2. Java 17,
 3. Intellij IDEA,
