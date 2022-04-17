@@ -9,11 +9,11 @@ import org.javamoney.moneta.Money;
 
 import java.util.stream.IntStream;
 
-import static com.equalexperts.ItemTestData.addAnotherDoveItemToShoppingCart;
-import static com.equalexperts.ItemTestData.addAxePrice;
-import static com.equalexperts.ItemTestData.addAxeQuantity;
-import static com.equalexperts.ItemTestData.addDovePrice;
-import static com.equalexperts.ItemTestData.addDoveQuantity;
+import static com.equalexperts.data.ItemTestData.addAnotherDoveItemToShoppingCart;
+import static com.equalexperts.data.ItemTestData.addAxePrice;
+import static com.equalexperts.data.ItemTestData.addAxeQuantity;
+import static com.equalexperts.data.ItemTestData.addDovePrice;
+import static com.equalexperts.data.ItemTestData.addDoveQuantity;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 public class ShoppingBasketStepDefs {

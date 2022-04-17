@@ -4,9 +4,9 @@ import org.javamoney.moneta.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.equalexperts.ItemTestData.load2AxeItemsIntoShoppingCart;
-import static com.equalexperts.ItemTestData.load3DoveItemsIntoShoppingCart;
-import static com.equalexperts.ItemTestData.load5DoveItemsIntoShoppingCart;
+import static com.equalexperts.data.ItemTestData.load2AxeItemsIntoShoppingCart;
+import static com.equalexperts.data.ItemTestData.load3DoveItemsIntoShoppingCart;
+import static com.equalexperts.data.ItemTestData.load5DoveItemsIntoShoppingCart;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 class ShoppingCartTest {
