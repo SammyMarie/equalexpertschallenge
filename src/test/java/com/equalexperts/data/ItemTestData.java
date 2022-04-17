@@ -1,4 +1,4 @@
-package com.equalexperts;
+package com.equalexperts.data;
 
 import com.equalexperts.model.Item;
 import com.equalexperts.service.ShoppingCart;
