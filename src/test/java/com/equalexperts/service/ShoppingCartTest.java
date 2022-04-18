@@ -12,9 +12,11 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 class ShoppingCartTest {
 
     private ShoppingCart shoppingCart;
+    private double taxValue;
 
     @BeforeEach
     void setup() {
+        taxValue = 12.5;
         shoppingCart = new ShoppingCart();
     }
 
@@ -82,7 +84,7 @@ class ShoppingCartTest {
     void calculateTotalItemTax_shouldSucceed() {
         load3DoveItemsIntoShoppingCart(shoppingCart);
         load2AxeItemsIntoShoppingCart(shoppingCart);
-        shoppingCart.setTaxValue(12.5);
+        shoppingCart.setTaxValue(taxValue);
         assertThat(shoppingCart.totalItemTax()).isEqualTo(39.99);
     }
 
@@ -90,8 +92,7 @@ class ShoppingCartTest {
     void calculateAdjustedItemTotalPrice_shouldSucceed() {
         load3DoveItemsIntoShoppingCart(shoppingCart);
         load2AxeItemsIntoShoppingCart(shoppingCart);
-        shoppingCart.setTaxValue(12.5);
-        shoppingCart.totalItemTax();
+        shoppingCart.setTaxValue(taxValue);
         assertThat(shoppingCart.calculateTotalAmount()).isEqualTo(Money.of(359.94, "GBP"));
     }
 }

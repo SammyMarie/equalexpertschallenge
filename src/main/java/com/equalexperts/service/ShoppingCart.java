@@ -45,8 +45,10 @@ public class ShoppingCart {
     public MonetaryAmount calculateTotalAmount() {
         items.forEach(item -> totalAmount = totalAmount.add(item.getUnitPrice().multiply(item.getQuantity())));
 
-        if (taxValue() != 0.00) {
+        if (taxValue() != 0.00 && totalItemTax != 0.00) {
             totalAmount = totalAmount.add(Money.of(totalItemTax, "GBP"));
+        } else if (taxValue() != 0.00 && totalItemTax == 0.00) {
+            totalAmount = totalAmount.add(Money.of(totalItemTax(), "GBP"));
         }
 
         return totalAmount;
