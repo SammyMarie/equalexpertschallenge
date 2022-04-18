@@ -22,7 +22,7 @@ public class ShoppingCart {
     private double totalItemTax;
     private List<Item> items;
     private MonetaryAmount totalAmount;
-    private MonetaryAmount subAmount;
+    private MonetaryAmount subTotalAmount;
 
     public ShoppingCart() {
         MonetaryOperator ROUNDING = Monetary.getRounding(RoundingQueryBuilder.of()
@@ -31,7 +31,7 @@ public class ShoppingCart {
                                                                              .build());
         items = new ArrayList<>();
         totalAmount = Money.of(0, "GBP").with(ROUNDING);
-        subAmount = Money.of(0, "GBP").with(ROUNDING);
+        subTotalAmount = Money.of(0, "GBP").with(ROUNDING);
     }
 
     public void addItemToBasket(Item item){
@@ -55,8 +55,8 @@ public class ShoppingCart {
     }
 
     public double totalItemTax() {
-        items.forEach(item -> subAmount = subAmount.add(item.getUnitPrice().multiply(item.getQuantity())));
-        double itemTotalTax = subAmount.multiply(taxValue() / 100).getNumber().doubleValue();
+        items.forEach(item -> subTotalAmount = subTotalAmount.add(item.getUnitPrice().multiply(item.getQuantity())));
+        double itemTotalTax = subTotalAmount.multiply(taxValue() / 100).getNumber().doubleValue();
         totalItemTax = new BigDecimal(String.valueOf(itemTotalTax)).setScale(2, RoundingMode.HALF_UP)
                                                                    .doubleValue();
         return totalItemTax;
